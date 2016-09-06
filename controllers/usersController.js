@@ -1,5 +1,9 @@
 var User = require('../models/User');
 
+
+function home(request, response){
+  response.json({message:'api app'})
+}
 // GET /api/users
 function index(request, response) {
   User.find({}, function(error, users) {
