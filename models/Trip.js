@@ -10,10 +10,15 @@ var TripSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'Driver'
   },
-  midpoint : {
+  startPoint : {
     latitude  : Number,
     longitude : Number
+  },
+  emdPoint: {
+    latitude: Number,
+    longitude:Number
   }
+  completed:{type:false}
 });
 
 var Match = mongoose.model('Match', matchSchema);
