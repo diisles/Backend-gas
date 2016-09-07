@@ -83,5 +83,6 @@ module.exports = {
   create: create,
   show: show,
   update: update,
-  destroy: destroy
+  destroy: destroy,
+  home: home
 }
