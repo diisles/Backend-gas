@@ -48,13 +48,16 @@ function update(request, response) {
   User.findById({_id: id}, function(error, user) {
     if(error) response.json({message: 'Could not find user b/c:' + error});
 
-    if(request.body.title) user.title = request.body.title;
-    if(request.body.priority) user.priority = request.body.priority;
-    if(request.body.difficulty) user.difficulty = request.body.difficulty;
-    if(request.body.isComplete) user.isComplete = request.body.isComplete;
-    if(request.body.createdAt) user.createdAt = request.body.createdAt;
-    if(request.body.updatedAt) user.updatedAt = request.body.updatedAt;
-    if(request.body.completedOn) user.completedOn = request.body.completedOn;
+    if(request.body.username) user.username = request.body.username;
+    if(request.body.home_addy) user.home_addy = request.body.home_addy;
+    if(request.body.work_addy) user.work_addy = request.body.work_addy;
+    if(request.body.vehicles) user.vehicles = request.body.vehicles;
+    if(request.body.email) user.email = request.body.email;
+    if(request.body.password) user.password = request.body.password;
+    if(request.body.tel) user.tel = request.body.tel;
+    if(request.body.location) user.location = request.body.location;
+
+
 
     user.save(function(error) {
       if(error) response.json({messsage: 'Could not update user b/c:' + error});

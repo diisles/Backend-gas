@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var User = require('./User.js').schema;
+var Driver = require('./Driver.js').schema;
 
 var TripSchema = new mongoose.Schema({
   users  : {
@@ -11,16 +13,16 @@ var TripSchema = new mongoose.Schema({
     ref  : 'Driver'
   },
   startPoint : {
-    latitude  : Number,
-    longitude : Number
+    x: Number,
+    y: Number
   },
   emdPoint: {
-    latitude: Number,
-    longitude:Number
-  }
+    x: Number,
+    y: Number
+  },
   completed:{type:false}
 });
 
-var Match = mongoose.model('Match', matchSchema);
+// var Match = mongoose.model('Match', matchSchema);
 
 module.exports = mongoose.model('Trip', TripSchema);

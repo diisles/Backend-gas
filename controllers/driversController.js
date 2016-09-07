@@ -1,7 +1,8 @@
-var Todo = require('../models/Drivers');
+var Driver = require('../models/Driver');
 
 // GET /api/todos
 function index(request, response) {
+  console.log(Driver)
   Driver.find({}, function(error, drivers) {
     if(error) response.json({message: 'Could not find any drivers'});
 
@@ -44,13 +45,13 @@ function update(request, response) {
   Driver.findById({_id: id}, function(error, driver) {
     if(error) response.json({message: 'Could not find driver b/c:' + error});
 
-    if(request.body.title) driver.title = request.body.title;
-    if(request.body.priority) driver.priority = request.body.priority;
-    if(request.body.difficulty) driver.difficulty = request.body.difficulty;
-    if(request.body.isComplete) driver.isComplete = request.body.isComplete;
-    if(request.body.createdAt) driver.createdAt = request.body.createdAt;
-    if(request.body.updatedAt) driver.updatedAt = request.body.updatedAt;
-    if(request.body.completedOn) driver.completedOn = request.body.completedOn;
+    if(request.body.firstName) driver.firstName = request.body.firstName;
+    if(request.body.lastName) driver.lastName = request.body.lastName;
+    if(request.body.tier) driver.tier = request.body.tier;
+    if(request.body.email) driver.email = request.body.email;
+    if(request.body.tel) driver.tel = request.body.tel;
+    if(request.body.location) driver.location = request.body.location;
+    // if(request.body.completedOn) driver.completedOn = request.body.completedOn;
 
     driver.save(function(error) {
       if(error) response.json({messsage: 'Could not update driver b/c:' + error});

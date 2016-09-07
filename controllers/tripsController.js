@@ -1,4 +1,4 @@
-var Trip = require('../models/Trips');
+var Trip = require('../models/Trip');
 
 // GET /api/trips
 function index(request, response) {
@@ -44,13 +44,13 @@ function update(request, response) {
   Trip.findById({_id: id}, function(error, trip) {
     if(error) response.json({message: 'Could not find trip b/c:' + error});
 
-    if(request.body.title) trip.title = request.body.title;
-    if(request.body.priority) trip.priority = request.body.priority;
-    if(request.body.difficulty) trip.difficulty = request.body.difficulty;
-    if(request.body.isComplete) trip.isComplete = request.body.isComplete;
-    if(request.body.createdAt) trip.createdAt = request.body.createdAt;
-    if(request.body.updatedAt) trip.updatedAt = request.body.updatedAt;
-    if(request.body.completedOn) trip.completedOn = request.body.completedOn;
+    if(request.body.users) trip.users = request.body.users;
+    if(request.body.drivers) trip.drivers = request.body.drivers;
+    if(request.body.startPoint) trip.startPoint = request.body.startPoint;
+    if(request.body.endPoint) trip.endPoint = request.body.endPoint;
+    if(request.body.completed) trip.completed = request.body.completed;
+    // if(request.body.updatedAt) trip.updatedAt = request.body.updatedAt;
+    // if(request.body.completedOn) trip.completedOn = request.body.completedOn;
 
     trip.save(function(error) {
       if(error) response.json({messsage: 'Could not update trip b/c:' + error});
