@@ -7,8 +7,15 @@ var driversController = require('../controllers/driversController');
 var tripsController = require('../controllers/tripsController');
 
 // root path:
-router.route('/')
-.get(usersController.home);
+// router.route('/')
+// .get(usersController.home);
+//
+// router.route('/login')
+// .get(usersController.show);
+// // .post(usersController)
+//
+// router.route('/signup')
+// .post(usersController.create);
 
 router.route('/users')
   //Get all users on map

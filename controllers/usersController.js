@@ -1,9 +1,9 @@
 var User = require('../models/User');
 
 
-function home(request, response){
-  response.json({message:'api app'})
-}
+// function home(request, response){
+//   response.json({message:'api app'})
+// }
 // GET /api/users
 function index(request, response) {
   User.find({}, function(error, users) {
@@ -20,10 +20,15 @@ function create(request, response) {
 
   var user = new User(request.body);
 
-  user.save(function(error) {
-    if(error) response.json({messsage: 'Could not ceate user b/c:' + error});
+  user.save(function(error, user) {
+    if(error){
+      console.log(error);
+      response.json({messsage: 'Could not ceate user b/c:' + error});
+    } else {
+      console.log(user)
+      response.json({user: user});
+    }
 
-    response.json({user: user});
   });
 }
 
@@ -83,6 +88,6 @@ module.exports = {
   create: create,
   show: show,
   update: update,
-  destroy: destroy,
-  home: home
+  destroy: destroy
+  // home: home
 }
