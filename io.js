@@ -17,3 +17,4 @@ io.configure(function () {
   io.set('log level', 1)
 })
 });
+ module.exports = io;
