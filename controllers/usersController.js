@@ -47,7 +47,7 @@ function show(request, response) {
 function update(request, response) {
   console.log('in PATCH');
   console.log('body:',request.body);
-
+``
   var id = request.params.id;
 
   User.findById({_id: id}, function(error, user) {

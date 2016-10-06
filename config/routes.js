@@ -5,7 +5,7 @@ var router = express.Router();
 var usersController = require('../controllers/usersController');
 var driversController = require('../controllers/driversController');
 var tripsController = require('../controllers/tripsController');
-
+var socketController = require('../controllers/socketController');
 // root path:
 // router.route('/')
 // .get(usersController.home);

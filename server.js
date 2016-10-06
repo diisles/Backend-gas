@@ -1,20 +1,26 @@
 var express = require('express');
-var server = require('http').createServer(app);
-var io = require('socket.io')();
+// var server = require('http').createServer(app);
 var path = require('path');
+var url = require('url');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var cors = require('cors')
+var cors = require('cors');
 
 require('dotenv').config();
 
 var routes = require('./config/routes');
 // var users  = require('./routes/users');
-var mongoose = require('./config/database')
+var mongoose = require('./config/database');
 
 var app = express();
+
+// var httpServer = http.createServer(app);
+
+//load and attach socket.io to http server
+// var io = require('socket.io');
+// io.listen(server);
 
 // document.addEventListener('DOMContentLoaded', function(){
 //
@@ -22,6 +28,90 @@ var app = express();
 //   var socket = io();
 //   console.log(socket);
 // })
+
+// var coneectedUsers = {};
+// var webSocket = io.listen(httpServer);
+// var httpServer = http.createServer(app)
+//
+//
+// webSocket.sockets.on('connection', function (socket){
+//
+//
+// socket.on('join', function(user, sendKey){
+//   user.key = Date.now();
+//   socekt.set('userKey', user.key);
+//   sendKey(user.key);
+//
+//   connectedUsers[user.key] = user;
+//   socket.broadcast.emit('user connected', user);
+// });
+//
+// socket.on('message', function(msg){
+//   socket.get('userkey', function(err, key){
+//     var user = connectedUsers[key];
+//     if(user){
+//       var data = {
+//         key : key,
+//         sender : user.name,
+//         message : msg
+//       };
+//       socket.broadcast.emit('new chat msg',data);
+//     }
+//   });
+// });
+//
+//
+//   console.log('Client connected to socket.io!')
+//
+//   socket.on('send location', function(data){
+//     socket.get('userkey', function(err, key){
+//       var user = connectedUsers[key];
+//       if(user) {
+//         user.lat = data.lat;
+//         user.lng = data.lng;
+//         data.name = user.namedata.key = key;
+//         io.sockets.emit('locatoin update', data);
+//       }
+//     });
+//     // io.sockets.emit('location', data);
+//   });
+//
+//   socket.on('request locations', function(sendData){
+//     sendData(connectedUsers);
+//   });
+//
+// socket.on('disconnect', function(){
+//   socket.get('userkey', function(err, key){
+//     var userInfo = connectdUsers[key];
+//     if(userInfo) {
+//       delete connectedUsers[key];
+//       socket.broadcast.emit('user disconnected', key);
+//     }
+//   });
+// });
+//
+
+
+
+
+
+
+
+  // For serving static files inside ./client
+app.use(require('express').static(__dirname + '/client'));
+
+// For hosting on Heroku
+// io.configure(function () {
+//   io.set("transports", ["xhr-polling"]);
+//   io.set("polling duration", 10);
+//   io.set('log level', 1)
+// })
+// });
+
+
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

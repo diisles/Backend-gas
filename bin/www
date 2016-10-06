@@ -7,24 +7,120 @@
 var app = require('../server');
 var debug = require('debug')('api:server');
 var http = require('http');
-
+var io = require('socket.io')();
+var fs = require('fs');
+var url = require('url');
+var path = require('path');
+var mime = require('mime');
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(function(request, response){
+  var pathname = url.parse(request.url).pathname;
+  if(pathname == "/") pathname = "index.html";
+  var filename = path.join(process.cwd(),'public', pathname);
+
+  fs.exists(filename, function(exists){
+    if(!exists) {
+      response.writeHead(404, {"Content-Type": "text/plain"});
+      response.write("404 Not Found");
+      response.end();
+      return;
+    }
+
+    response.writeHead(200, {'Content-Type': mime.lookup(filename)});
+    fs.createReadStream(filename,{
+      'flags': 'r',
+      'encoding': 'binary',
+      'mode' : 0666,
+      'bufferSize': 4 * 1024
+    }).addListener("data", function(chunk){
+      response.write(chunk, 'binary');
+    }).addListener("close", function(){
+      response.end();
+    });
+  });
+});
+
+
 
 //load and attach socket.io to http server
-var io = require('socket.io');
-io.listen(server);
+var connectedUsers = {};
+var webSocket = io.listen(server);
 
+// For hosting on Heroku
+if(process.env.NODE_ENV == 'production'){
+webSocket.configure(function () {
+  webSocket.set("transports", ["xhr-polling"]);
+  webSocket.set("polling duration", 10);
+  // webSocket.set('log level', 1)
+  });
+}
+
+
+webSocket.sockets.on('connection', function(socket){
+
+  socket.on('join', function(user, sendKey){
+    user.key = Date.now();
+    socket.set('userkey', user.key);
+    sendKey(user.key);
+
+    connectedUsers[user.key] = user;
+    socket.broadcast.emit("user connected", user);
+  });
+
+  socket.on('message', function(msg){
+    socket.get('userkey', function(err, key){
+      var user = connectedUsers[key];
+      if(user){
+        var data = {
+        key: key,
+        sender: user.name,
+        message: msg
+      };
+      socket.broadcast.emit('new chat msg', data);
+    }
+  });
+});
+
+socket.on("send location", function(data) {
+   socket.get('userkey', function(err, key) {
+     var user = connectedUsers[key];
+     if(user) {
+       user.lat = data.lat;
+       user.lng = data.lng;
+       data.name = user.name
+       data.key = key;
+       socket.broadcast.emit("location update", data);
+     }
+   });
+ });
+
+ socket.on("request locations", function(sendData) {
+   sendData(connectedUsers);
+ });
+
+ socket.on('disconnect', function() {
+   socket.get('userkey', function(err, key) {
+     var userInfo = connectedUsers[key];
+     if(userInfo) {
+       console.log('User ', userInfo.username, ' has disconnected. Key = ', key);
+       delete connectedUsers[key];
+       socket.broadcast.emit("user disconnected", key);
+     }
+   });
+ });
+ });
+
+// Open a port for the server to listen to.
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -40,44 +136,40 @@ server.on('listening', onListening);
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (isNaN(port))
     // named pipe
     return val;
+    if (port >= 0)
+      // port number
+      return port;
+      return false;
   }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== 'listen')
     throw error;
-  }
-
-  var bind = typeof port === 'string'
+    var bind = (typeof port === 'string')
     ? 'Pipe ' + port
     : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
-    case 'EADDRINUSE':
+      case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
       break;
-    default:
+      default:
       throw error;
+
+
+
   }
 }
 
@@ -87,7 +179,7 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
+  var bind = (typeof addr === 'string')
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);

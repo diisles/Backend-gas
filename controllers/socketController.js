@@ -1,23 +1,23 @@
 // var coneectedUsers = {};
-// var io = require('socket.io-client')();
+// var io = require('socket.io')();
 // var webSocket = io.listen(httpServer);
+// var httpServer = http.createServer(app);
 //
 //
+// io.on('connection', function (socket){
 //
-// webSocket.sockets.on('connection', function (socket){
 //
-//
-// webSocket.on('join', function(user, sendKey){
+// socket.on('join', function(user, sendKey){
 //   user.key = Date.now();
-//   webSocekt.set('userKey', user.key);
+//   socekt.set('userKey', user.key);
 //   sendKey(user.key);
 //
 //   connectedUsers[user.key] = user;
-//   webSocket.broadcast.emit('user connected', user);
+//   socket.broadcast.emit('user connected', user);
 // });
 //
-// webSocket.on('message', function(msg){
-//   webSocket.get('userkey', function(err, key){
+// socket.on('message', function(msg){
+//   socket.get('userkey', function(err, key){
 //     var user = connectedUsers[key];
 //     if(user){
 //       var data = {
@@ -25,7 +25,7 @@
 //         sender : user.name,
 //         message : msg
 //       };
-//       webSocket.broadcast.emit('new chat msg',data);
+//       socket.broadcast.emit('new chat msg',data);
 //     }
 //   });
 // });
@@ -33,29 +33,29 @@
 //
 //   console.log('Client connected to socket.io!')
 //
-//   webSocket.on('send location', function(data){
-//     webSocket.get('userkey', function(err, key){
+//   socket.on('send location', function(data){
+//     socket.get('userkey', function(err, key){
 //       var user = connectedUsers[key];
 //       if(user) {
 //         user.lat = data.lat;
 //         user.lng = data.lng;
 //         data.name = user.namedata.key = key;
-//         io.webSockets.emit('locatoin update', data);
+//         io.sockets.emit('locatoin update', data);
 //       }
 //     });
 //     // io.sockets.emit('location', data);
 //   });
 //
-//   webSocket.on('request locations', fucntion(sendData){
+//   socket.on('request locations', function(sendData){
 //     sendData(connectedUsers);
 //   });
 //
-// webSocket.on('disconnect', function(){
-//   webSocket.get('userkey', function(err, key){
+// socket.on('disconnect', function(){
+//   socket.get('userkey', function(err, key){
 //     var userInfo = connectdUsers[key];
 //     if(userInfo) {
 //       delete connectedUsers[key];
-//       webSocket.broadcast.emit('user disconnected', key);
+//       socket.broadcast.emit('user disconnected', key);
 //     }
 //   });
 // });
@@ -65,9 +65,9 @@
 //
 //
 //
-//   module.exports = io;
-//
-//   // For serving static files inside ./client
+//   module.exports = socketController;
+
+  // For serving static files inside ./client
 // app.use(require('express').static(__dirname + '/client'));
 //
 // // For hosting on Heroku
@@ -76,4 +76,3 @@
 //   io.set("polling duration", 10);
 //   io.set('log level', 1)
 // })
-// });
