@@ -6,10 +6,13 @@ var usersController = require('../controllers/usersController');
 var driversController = require('../controllers/driversController');
 var tripsController = require('../controllers/tripsController');
 var socketController = require('../controllers/socketController');
+
+
 // root path:
-// router.route('/')
-// .get(usersController.home);
-//
+
+router.route('/')
+.get(socketController.home);
+
 // router.route('/login')
 // .get(usersController.show);
 // // .post(usersController)
@@ -59,4 +62,4 @@ router.route('/users/:id')
       //DELETE remove specific trip from DB
       .delete(tripsController.destroy);
 
-  module.exports = router
+  module.exports = router;

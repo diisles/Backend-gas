@@ -1,3 +1,38 @@
+var Socket = require('../models/Socket');
+
+module.exports =
+function(io){
+  var routes = {};
+  routes.index = function(req, res, next){
+  // got this next line from http://stackoverflow.com/questions/25700737/nodejs-access-socket-io-instance-in-express-routes-files
+  io.sockets.emit('payload');
+  res.render('/', {
+    title: 'Awesome page'
+  });
+ };
+  return routes;
+};
+
+
+
+
+
+
+//
+//  module.exports = {
+//   home: home
+// };
+
+
+
+
+
+
+
+
+
+
+
 // var coneectedUsers = {};
 // var io = require('socket.io')();
 // var webSocket = io.listen(httpServer);

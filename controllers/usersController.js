@@ -4,7 +4,9 @@ var User = require('../models/User');
 // function home(request, response){
 //   response.json({message:'api app'})
 // }
-// GET /api/users
+
+
+///////  GET /api/users
 function index(request, response) {
   User.find({}, function(error, users) {
     if(error) response.json({message: 'Could not find any users'});
@@ -32,7 +34,7 @@ function create(request, response) {
   });
 }
 
-// GET /api/users/:id
+//////  GET /api/users/:id
 function show(request, response) {
   var id = request.params.id;
 
@@ -43,13 +45,15 @@ function show(request, response) {
   }).select('-__v');
 }
 
-// PATCH /api/users/:id
+//////  PATCH /api/users/:id
 function update(request, response) {
   console.log('in PATCH');
   console.log('body:',request.body);
 ``
   var id = request.params.id;
 
+
+  // set the new user information if it exits in the request. 
   User.findById({_id: id}, function(error, user) {
     if(error) response.json({message: 'Could not find user b/c:' + error});
 
@@ -72,7 +76,7 @@ function update(request, response) {
   }).select('-__v');
 }
 
-// DELETE /api/criminals/:id
+//////  DELETE /api/criminals/:id
 function destroy(request, response) {
   var id = request.params.id;
 
@@ -90,4 +94,4 @@ module.exports = {
   update: update,
   destroy: destroy
   // home: home
-}
+};

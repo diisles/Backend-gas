@@ -7,7 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-
+var io = require('socket.io')();
 require('dotenv').config();
 
 var routes = require('./config/routes');
@@ -94,7 +94,7 @@ var app = express();
 
 
 
-
+app.set('socketio',io);
 
 
   // For serving static files inside ./client
@@ -125,6 +125,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(debugReq);
 
 app.use('/', routes);
 //won't need this below cause got rid of routes folder

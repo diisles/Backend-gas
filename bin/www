@@ -7,7 +7,7 @@
 var app = require('../server');
 var debug = require('debug')('api:server');
 var http = require('http');
-var io = require('socket.io')();
+var io = require('socket.io')(server);
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
@@ -15,7 +15,7 @@ var mime = require('mime');
 /**
  * Get port from environment and store in Express.
  */
-
+// app.set('socketio',io);
 
 /**
  * Create HTTP server.
@@ -29,7 +29,7 @@ var server = http.createServer(function(request, response){
   fs.exists(filename, function(exists){
     if(!exists) {
       response.writeHead(404, {"Content-Type": "text/plain"});
-      response.write("404 Not Found");
+      response.write("404 Not Found Hmmm?");
       response.end();
       return;
     }
