@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var io = require('socket.io')();
 //Reqire controllers.
 var usersController = require('../controllers/usersController');
 var driversController = require('../controllers/driversController');
@@ -9,10 +9,10 @@ var socketController = require('../controllers/socketController');
 
 
 // root path:
-
+module.exports = function(router, io){
 router.route('/')
-.get(socketController.home);
-
+.get(socketController.index(router, io));
+}
 // router.route('/login')
 // .get(usersController.show);
 // // .post(usersController)
