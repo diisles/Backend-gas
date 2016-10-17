@@ -11,6 +11,16 @@ function(io){
 };
 
 
+// function(io){ index(request, response, next)
+//   io.sockets.emit();
+//   User.find({}, function(error, users) {
+//       if(error) response.json({message: 'Could not find any users'});
+//
+//       response.json({users: users});
+//     }).select('-__v');
+//
+// };
+
 
 
 
