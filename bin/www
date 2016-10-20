@@ -12,6 +12,7 @@ var fs = require('fs');
 var url = require('url');
 var path = require('path');
 var mime = require('mime');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,33 +21,75 @@ var mime = require('mime');
  * Create HTTP server.
  */
 
-var server = http.createServer(function(request, response){
+//////////////////////////////
+///////// Got this static server code below from http://danielnill.com/nodejs-tutorial-with-socketio/
+//////////////////////////////
 
-  var pathname = url.parse(request.url).pathname;
-  if(pathname === "/") pathname = "index.html";
-  var filename = path.join(process.cwd(),'public', pathname);
 
-  fs.exists(filename, function(exists){
-    if(!exists) {
-      response.writeHead(404, {"Content-Type": "text/plain"});
-      response.write("404 Not Found Hmmm?");
-      response.end();
-      return;
-    }
 
-    response.writeHead(200, {'Content-Type': mime.lookup(filename)});
-    fs.createReadStream(filename,{
-      'flags': 'r',
-      'encoding': 'binary',
-      'mode' : 0666,
-      'bufferSize': 4 * 1024
-    }).addListener("data", function(chunk){
-      response.write(chunk, 'binary');
-    }).addListener("close", function(){
-      response.end();
-    });
-  });
-});
+
+     var server = http.createServer(function(request, response){
+         var path = url.parse(request.url).pathname;
+
+         switch(path){
+             case '/':
+                 response.writeHead(200, {'Content-Type': 'text/html'});
+                 response.write('hello world');
+                 response.end();
+                 break;
+             case '/socket.html':
+                 fs.readFile(__dirname + path, function(error, data){
+                     if (error){
+                         response.writeHead(404);
+                         response.write("opps this doesn't exist - 404");
+                         response.end();
+                     }
+                     else{
+                         response.writeHead(200, {"Content-Type": "text/html"});
+                         response.write(data, "utf8");
+                         response.end();
+                     }
+                 });
+                 break;
+             default:
+                 response.writeHead(404);
+                 response.write("opps this doesn't exist - 404");
+                 response.end();
+                 break;
+         }
+     });
+
+     server.listen(3000);
+
+
+
+// var server = http.createServer(function(request, response){
+//
+//   var pathname = url.parse(request.url).pathname;
+//   if(pathname === "/") pathname = "index.html";
+//   var filename = path.join(process.cwd(),'public', pathname);
+//
+//   fs.exists(filename, function(exists){
+//     if(!exists) {
+//       response.writeHead(404, {"Content-Type": "text/html"});
+//       response.write("404 Not Found Hmmm?");
+//       response.end();
+//       return;
+//     }
+//
+//     response.writeHead(200, {'Content-Type': mime.lookup(filename)});
+//     fs.createReadStream(filename,{
+//       'flags': 'r',
+//       'encoding': 'binary',
+//       'mode' : 0666,
+//       'bufferSize': 4 * 1024
+//     }).addListener("data", function(chunk){
+//       response.write(chunk, 'binary');
+//     }).addListener("close", function(){
+//       response.end();
+//     });
+//   });
+// });
 
 
 
@@ -119,7 +162,7 @@ socket.on("send location", function(data) {
  });
 
 // Open a port for the server to listen to.
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort (process.env.PORT || '3000');
 app.set('port', port);
 /**
  * Listen on provided port, on all network interfaces.

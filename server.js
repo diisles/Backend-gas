@@ -15,7 +15,6 @@ var routes = require('./config/routes');
 var mongoose = require('./config/database');
 
 var app = express();
-
 // var httpServer = http.createServer(app);
 
 //load and attach socket.io to http server
@@ -119,10 +118,16 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(cors());
-app.get('/', function(req,res,next){
-  res.json({msg: 'This is Cors-enabled for all origins!'});
-});
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+
+// app.get('/', function(req,res,next){
+//   res.json({msg: 'This is Cors-enabled for all origins!'});
+// });
+
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
