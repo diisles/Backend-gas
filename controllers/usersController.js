@@ -25,7 +25,7 @@ function create(request, response) {
   user.save(function(error, user) {
     if(error){
       console.log(error);
-      response.json({messsage: 'Could not ceate user b/c:' + error});
+      response.json({messsage: 'Could not create user b/c:' + error});
     } else {
       console.log(user)
       response.json({user: user});
@@ -53,7 +53,7 @@ function update(request, response) {
   var id = request.params.id;
 
 
-  // set the new user information if it exits in the request. 
+  // set the new user information if it exits in the request.
   User.findById({_id: id}, function(error, user) {
     if(error) response.json({message: 'Could not find user b/c:' + error});
 
@@ -76,7 +76,7 @@ function update(request, response) {
   }).select('-__v');
 }
 
-//////  DELETE /api/criminals/:id
+//////  DELETE /api/user/:id
 function destroy(request, response) {
   var id = request.params.id;
 

@@ -1,6 +1,6 @@
 var Driver = require('../models/Driver');
 
-// GET /api/todos
+// GET /api/drivers
 function index(request, response) {
   console.log(Driver)
   Driver.find({}, function(error, drivers) {
@@ -10,7 +10,7 @@ function index(request, response) {
   }).select('-__v');
 }
 
-// POST /api/todos
+// POST /api/driver
 function create(request, response) {
   console.log('in POST');
   console.log('body:',request.body);
@@ -24,7 +24,7 @@ function create(request, response) {
   });
 }
 
-// GET /api/todos/:id
+// GET /api/driver/:id
 function show(request, response) {
   var id = request.params.id;
 
@@ -35,7 +35,7 @@ function show(request, response) {
   }).select('-__v');
 }
 
-// PATCH /api/todos/:id
+// PATCH /api/driver/:id
 function update(request, response) {
   console.log('in PATCH');
   console.log('body:',request.body);
@@ -61,7 +61,7 @@ function update(request, response) {
   }).select('-__v');
 }
 
-// DELETE /api/criminals/:id
+// DELETE /api/driver/:id
 function destroy(request, response) {
   var id = request.params.id;
 

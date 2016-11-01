@@ -1,5 +1,5 @@
 var express = require('express');
-// var server = require('http').createServer(app);
+
 var path = require('path');
 var url = require('url');
 var favicon = require('serve-favicon');
@@ -91,7 +91,10 @@ var app = express();
 //
 
 
-
+app.get('/api/endpoint',  function(req,res){
+  res.send(result)
+  console.log('Got a request from host:', req.hostname, 'Origin:', req.headers.origin)
+})
 
 // app.set('socketio',io);
 
