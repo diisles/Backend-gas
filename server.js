@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var debug = require('debug')('api:server');
 // var io = require('socket.io')();
 require('dotenv').config();
 
@@ -91,10 +92,13 @@ var app = express();
 //
 
 
-app.get('/api/endpoint',  function(req,res){
-  res.send(result)
-  console.log('Got a request from host:', req.hostname, 'Origin:', req.headers.origin)
-})
+//////////this code below is not needed cause I have now set up a proxy server to handle the cors issue.
+//////////
+
+// app.get('/api/endpoint',  function(req,res){
+//   res.send(result)
+//   console.log('Got a request from host:', req.hostname, 'Origin:', req.headers.origin)
+// })
 
 // app.set('socketio',io);
 

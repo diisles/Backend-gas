@@ -25,7 +25,7 @@ function create(request, response) {
   user.save(function(error, user) {
     if(error){
       console.log(error);
-      response.json({messsage: 'Could not create user b/c:' + error});
+      response.json({message: 'Could not create user b/c:' + error});
     } else {
       console.log(user)
       response.json({user: user});

@@ -7,7 +7,8 @@
 var app = require('../server');
 var debug = require('debug')('api:server');
 var http = require('http');
-var io = require('socket.io');
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 var fs = require('fs');
 var url = require('url');
 var path = '/stomp';
@@ -37,38 +38,38 @@ var mime = require('mime');
  //////////////////////////////
 
 
-var httpServer = http.createServer(function(request, response){
-         var path = url.parse(request.url).pathname;
-
-         switch(path){
-             case '/':
-                 response.statusCode = 200; ({'Content-Type': 'text/html'});
-                 response.write('hello world');
-                 response.end();
-                 break;
-             case '/socket.html':
-                 fs.readFile(__dirname + path, function(error, data){
-                     if (error){
-                         response.statusCode = 404;
-                         response.write("opps this doesn't exist - 404");
-                         response.end();
-                     }
-                     else{
-                         response.statusCode = 200;
-                         response.setHeader('Access-Control-Allow-Origin', '*');
-                         response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Acccept')
-                         response.write(data, "utf8");
-                         response.end();
-                     }
-                 });
-                 break;
-             default:
-                 response.statusCode = 404;
-                 response.write("opps this doesn't exist - 404");
-                 response.end();
-                 break;
-         }
-     });
+// var httpServer = http.createServer(function(request, response){
+//          var path = url.parse(request.url).pathname;
+//
+//          switch(path){
+//              case '/':
+//                  response.statusCode = 200; ({'Content-Type': 'text/html'});
+//                  response.write('hello world');
+//                  response.end();
+//                  break;
+//              case '/socket.html':
+//                  fs.readFile(__dirname + path, function(error, data){
+//                      if (error){
+//                          response.statusCode = 404;
+//                          response.write("ooops this doesn't exist - 404");
+//                          response.end();
+//                      }
+//                      else{
+//                          response.statusCode = 200;
+//                          response.setHeader('Access-Control-Allow-Origin', '*');
+//                          response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Acccept')
+//                          response.write(data, "utf8");
+//                          response.end();
+//                      }
+//                  });
+//                  break;
+//              default:
+//                  response.statusCode = 404;
+//                  response.write("Umm this doesn't exist - 404");
+//                  response.end();
+//                  break;
+//          }
+//      });
 
 
 
@@ -107,22 +108,22 @@ var httpServer = http.createServer(function(request, response){
 //  });
 
 //load and attach socket.io to http server
-var connectedUsers = {};
-var webSocket = io.listen(httpServer,function(){
-  console.log('listening on *:3000');
-});
+// var webSocket = io.listen(server,function(){
+//   console.log('listening on *:3000');
+// });
 
 // For hosting on Heroku
-if(process.env.NODE_ENV == 'production'){
-webSocket.configure(function () {
-  webSocket.set("transports", ["xhr-polling"]);
-  webSocket.set("polling duration", 10);
-  // webSocket.set('log level', 1)
-  });
-}
+// if(process.env.NODE_ENV == 'production'){
+// webSocket.configure(function () {
+//   webSocket.set("transports", ["xhr-polling"]);
+//   webSocket.set("polling duration", 10);
+//   // webSocket.set('log level', 1)
+//   });
+// }
 
+var connectedUsers = {};
 
-webSocket.sockets.on('connection', function(socket){
+io.on('connection', function(socket){
   console.log('socket connected')
 
   socket.on('join', function(user, sendKey){
@@ -184,9 +185,11 @@ app.set('port', port);
  * Listen on provided port, on all network interfaces.
  */
 
-httpServer.listen(port);
-httpServer.on('error', onError);
-httpServer.on('listening', onListening);
+server.listen(port, function(){
+  console.log('listening here')
+server.on('error', onError);
+server.on('listening', onListening);
+});
 
 /**
  * Normalize a port into a number, string, or false.
@@ -237,7 +240,7 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = httpServer.address();
+  var addr = server.address();
   var bind = (typeof addr === 'string')
     ? 'pipe ' + addr
     : 'port ' + addr.port;
