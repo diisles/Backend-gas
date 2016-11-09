@@ -11,27 +11,17 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
 var url = require('url');
-var path = '/stomp';
+// var path = '/stomp';
 var mime = require('mime');
- // var allowedOrigins = "http://localhost:*http://localhost:3000";
 
-// trying this trick to correct the Cors issue from: https://github.com/socketio/socket.io/issues/2294
+
+////////////////// trying this trick to correct the Cors issue from: https://github.com/socketio/socket.io/issues/2294
+//////////////////
  // var sio_server = io(http.server,{
  //   origins: allowedOrigins,
  //   path: path
  // });
-/**
- * Get port from environment and store in Express.
- */
 
-
-
-
-
-
- /**
- * Create HTTP server.
- */
 
  //////////////////////////////
  ///////// Got this static server code below from http://danielnill.com/nodejs-tutorial-with-socketio/
@@ -112,7 +102,8 @@ var mime = require('mime');
 //   console.log('listening on *:3000');
 // });
 
-// For hosting on Heroku
+///////////////// For hosting on Heroku//////
+
 // if(process.env.NODE_ENV == 'production'){
 // webSocket.configure(function () {
 //   webSocket.set("transports", ["xhr-polling"]);
@@ -120,10 +111,26 @@ var mime = require('mime');
 //   // webSocket.set('log level', 1)
 //   });
 // }
+/////////////////////
+
+// Open a port for the server to listen to.
+var port = normalizePort (process.env.PORT || '3000');
+// app.set('port', port);
+/**
+* Listen on provided port, on all network interfaces.
+*/
+
+server.listen(port, function(){
+  console.log('listening here')
+  server.on('error', onError);
+  server.on('listening', onListening);
+});
 
 var connectedUsers = {};
 
 io.on('connection', function(socket){
+  io.set("transports",['xhr-polling']);
+  io.set('polling duration',10);
   console.log('socket connected')
 
   socket.on('join', function(user, sendKey){
@@ -178,18 +185,6 @@ socket.on("send location", function(data) {
  });
  });
 
-// Open a port for the server to listen to.
-var port = normalizePort (process.env.PORT || '3000');
-app.set('port', port);
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port, function(){
-  console.log('listening here')
-server.on('error', onError);
-server.on('listening', onListening);
-});
 
 /**
  * Normalize a port into a number, string, or false.
