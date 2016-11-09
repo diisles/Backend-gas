@@ -8,7 +8,7 @@ var UserSchema = mongoose.Schema({
 
   email: {type:String, required:false},
   password: {type:String, required:false},
-  
+  // tel: {type:String, required:true, unique:true},
   tel: {type:String, unique:false, required:false},
   location: { x: Number, y: Number}
 });
