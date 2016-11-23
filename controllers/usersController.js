@@ -11,7 +11,7 @@ function index(request, response) {
   User.find({}, function(error, users) {
     if(error) response.json({message: 'Could not find any users'});
 
-    response.json({users: users});
+    response.json({users: users, message: message});
   }).select('-__v');
 }
 
@@ -21,6 +21,9 @@ function create(request, response) {
   console.log('body:',request.body);
 
   var user = new User(request.body);
+  var message = null;
+  user.online = true;
+  user.provider = 'local';
 
   user.save(function(error, user) {
     if(error){
@@ -28,7 +31,7 @@ function create(request, response) {
       response.json({message: 'Could not create user b/c:' + error});
     } else {
       console.log(user)
-      response.json({user: user});
+      response.json({user: user, message: message});
     }
 
   });

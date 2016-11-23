@@ -10,7 +10,8 @@ var UserSchema = mongoose.Schema({
   password: {type:String, required:false},
   // tel: {type:String, required:true, unique:true},
   tel: {type:String, unique:false, required:false},
-  location: { x: Number, y: Number}
+  lat: { type: String},
+  longt: {type: String}
 });
 
 

@@ -9,7 +9,8 @@ var DriverSchema = mongoose.Schema({
   email: {type:String, required:false},
   // password: {type:String, required:true, unique:true},
   tel: {type:String, required:false, unique:false},
-  location:{ x: Number ,  y: Number}
+  lat:{ type: String},
+  longt:{tyupe: String}
 });
 
 module.exports = mongoose.model('Driver', DriverSchema)

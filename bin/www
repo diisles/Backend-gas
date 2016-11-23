@@ -126,65 +126,78 @@ server.listen(port, function(){
   server.on('listening', onListening);
 });
 
-var connectedUsers = {};
 
 io.on('connection', function(socket){
-  io.set("transports",['xhr-polling']);
-  io.set('polling duration',10);
   console.log('socket connected')
 
-  socket.on('join', function(user, sendKey){
-    user.key = Date.now();
-    socket.set('userkey', user.key);
-    sendKey(user.key);
-
-    connectedUsers[user.key] = user;
-    socket.broadcast.emit("user connected", user);
+  socket.on('add', function(message){
+    console.log("ID: %s latitude = %d longitude = %d, socket.id, message.latitude, message.longitude");
+    io.sockets.emit('add',{'id': socket.id, 'latitude': message.latitude, 'longitude': message.longitude});
   });
 
-  socket.on('message', function(msg){
-    socket.get('userkey', function(err, key){
-      var user = connectedUsers[key];
-      if(user){
-        var data = {
-        key: key,
-        sender: user.name,
-        message: msg
-      };
-      socket.broadcast.emit('new chat msg', data);
-    }
+  //Remove client from Google Map
+  socket.on('diconnect', function(){
+    io.sockets.emit('remove',{'id':socket.id});
   });
-});
 
-socket.on("send location", function(data) {
-   socket.get('userkey', function(err, key) {
-     var user = connectedUsers[key];
-     if(user) {
-       user.lat = data.lat;
-       user.lng = data.lng;
-       data.name = user.name
-       data.key = key;
-       socket.broadcast.emit("location update", data);
-     }
-   });
- });
 
- socket.on("request locations", function(sendData) {
-   sendData(connectedUsers);
- });
 
- socket.on('disconnect', function() {
-   socket.get('userkey', function(err, key) {
-     var userInfo = connectedUsers[key];
-     if(userInfo) {
-       console.log('User ', userInfo.username, ' has disconnected. Key = ', key);
-       delete connectedUsers[key];
-       socket.broadcast.emit("user disconnected", key);
-     }
-   });
- });
- });
+  // var connectedUsers = {};
+  // io.set("transports",['xhr-polling']);
+  // io.set('polling duration',10);
 
+//   socket.on('join', function(user, sendKey){
+//     user.key = Date.now();
+//     socket.set('userkey', user.key);
+//     sendKey(user.key);
+//
+//     connectedUsers[user.key] = user;
+//     socket.broadcast.emit("user connected", user);
+//   });
+//
+//   socket.on('message', function(msg){
+//     socket.get('userkey', function(err, key){
+//       var user = connectedUsers[key];
+//       if(user){
+//         var data = {
+//         key: key,
+//         sender: user.name,
+//         message: msg
+//       };
+//       socket.broadcast.emit('new chat msg', data);
+//     }
+//   });
+// });
+//
+// socket.on("send location", function(data) {
+//    socket.get('userkey', function(err, key) {
+//      var user = connectedUsers[key];
+//      if(user) {
+//        user.lat = data.lat;
+//        user.lng = data.lng;
+//        data.name = user.name
+//        data.key = key;
+//        socket.broadcast.emit("location update", data);
+//      }
+//    });
+//  });
+//
+//  socket.on("request locations", function(sendData) {
+//    sendData(connectedUsers);
+//  });
+//
+//  socket.on('disconnect', function() {
+//    socket.get('userkey', function(err, key) {
+//      var userInfo = connectedUsers[key];
+//      if(userInfo) {
+//        console.log('User ', userInfo.username, ' has disconnected. Key = ', key);
+//        delete connectedUsers[key];
+//        socket.broadcast.emit("user disconnected", key);
+//      }
+//    });
+//  });
+ });
+//
 
 /**
  * Normalize a port into a number, string, or false.
