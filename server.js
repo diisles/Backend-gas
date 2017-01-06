@@ -53,9 +53,15 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+app.all('*', function(req,res,next){
+  res.header("Access-Control-Allow-Origin","*");
+  res.header("Access-Control-Allow-Headers","X-Requested-With");
+  next();
+});
 app.use(cors({
-  origin: true,
-  credentials: true
+  credentials: false,
+  origin: true
 }));
 
 // app.get('/', function(req,res,next){

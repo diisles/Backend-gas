@@ -8,12 +8,20 @@ var app = require('../server');
 var debug = require('debug')('api:server');
 var http = require('http');
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+// var io = require('socket.io')(server);
+var io = require('socket.io')(server, {origins:'localhost:8100:*'});
 var fs = require('fs');
 var url = require('url');
 // var path = '/stomp';
 var mime = require('mime');
-
+// var origin = request.headers.origin || request.headers.referer
+//   , origins = this .get('origins');
+//   var parts = url.parse(origin);
+//   parts.port = parts.port || 3000;
+//   var  ok =
+//     ~origins.indexOf(parts.hostname + ':' + parts.port) ||
+//     ~origins.indexOf(parts.hostname + ':*') ||
+//     ~origins.indexOf('*:' + parts.port);
 
 ////////////////// trying this trick to correct the Cors issue from: https://github.com/socketio/socket.io/issues/2294
 //////////////////

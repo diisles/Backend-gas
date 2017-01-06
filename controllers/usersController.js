@@ -11,7 +11,8 @@ function index(request, response) {
   User.find({}, function(error, users) {
     if(error) response.json({message: 'Could not find any users'});
 
-    response.json({users: users, message: message});
+    response.json({users: users});
+    // response.json({users: users, message: message});
   }).select('-__v');
 }
 
